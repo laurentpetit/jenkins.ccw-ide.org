@@ -1,0 +1,8 @@
+---
+- name: Jenkins
+  hosts jenkins
+  roles:
+    - ansible-jenkins
+
+# helpful link: https://github.com/ICTO/ansible-jenkins
+# helpful link: http://blog.mist.io/post/82383668190/move-fast-and-dont-break-things-testing-with

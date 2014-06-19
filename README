@@ -1,0 +1,34 @@
+This repository provides Ansible playbooks to manage Counterclockwise servers
+
+# Jenkins Server
+
+The Jenkins server is  `jenkins.ccw-ide.org`
+
+`laurentpetit/ccw` github repository has a hook to reach `jenkins.ccw-ide.org` which will trigger builds and deploys (when successful) to `updatesite.ccw-ide.org`
+
+## Jenkins Server provisioning
+
+### Jenkins Server Pre-requisite
+
+- Have an Ubuntu 14.04 server, create a `jenkins.ccw-ide.org` subdomain type A DNS entry pointing to it
+- create a `ccw` user with a strong password
+- add user `ccw` to the `sudoers` group
+- add your public key to `/home/ccw/.ssh/authorized_keys`
+- modify `/etc/ssh/sshd_config`:
+  - block root login
+  - deny password authentication
+  - restart ssh service
+
+### Ansible control machine
+
+You need Ansible ( http://www.ansible.com ) installed on your `Ansible control machine` (e.g. your laptop).
+
+### Configure your Jenkins Server
+
+You can customize the installation:
+
+- Modify the list of Jenkins plugins to be installed in `host_vars/jenkins.ccw-ide.org` file.
+
+Run the Jenkins playbook to (re)configure your Jenkins Server:
+
+    ansible-playbook -K -i hosts jenkins.yml # -K option for being asked for password when ansible is sudoing
