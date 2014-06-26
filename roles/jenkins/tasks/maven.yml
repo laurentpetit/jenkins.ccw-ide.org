@@ -1,0 +1,29 @@
+---
+# Get and install Maven
+
+- name: Get maven from {{ maven_url }}
+  sudo: yes
+  get_url:
+    url: "{{ maven_url }}"
+    dest: /var/lib
+
+- name: Unarchive maven to /var/lib
+  sudo: yes
+  unarchive:
+    copy: no
+    src: /var/lib/apache-maven-{{ maven_version }}-bin.tar.gz
+    dest: /var/lib
+
+- name: Remove maven archive
+  sudo: yes
+  file: 
+    name: /var/lib/apache-maven-{{ maven_version }}-bin.tar.gz
+    state: absent
+
+- name: Add symbolic link to maven directory
+  sudo: yes
+  file:
+    src: /var/lib/apache-maven-{{ maven_version }}
+    dest: /var/lib/apache-maven
+    state: link
+

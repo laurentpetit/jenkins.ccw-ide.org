@@ -8,6 +8,9 @@ jenkins:
       - 'openjdk-7-jre-headless'
       - 'git'
       - 'curl'
-      - 'maven'
   cli_dest: '{{ jenkins_dest }}/jenkins-cli.jar' # Jenkins CLI destination
   updates_dest: '{{ jenkins_dest }}/updates_jenkins.json' # Jenkins updates file
+
+maven_major_version: 3
+maven_version: 3.2.2
+maven_url: http://wwwftp.ciril.fr/pub/apache/maven/maven-{{ maven_major_version }}/{{ maven_version }}/binaries/apache-maven-{{ maven_version }}-bin.tar.gz
