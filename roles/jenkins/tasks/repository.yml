@@ -1,0 +1,9 @@
+---
+- name: Add jenkins apt-key
+  sudo: yes
+  apt_key: url={{ jenkins.deb.key }} state=present
+
+- name: Add Jenkins repository
+  sudo: yes
+  apt_repository: repo='{{ jenkins.deb.repo }}' state=present
+

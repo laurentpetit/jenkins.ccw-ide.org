@@ -1,0 +1,18 @@
+---
+- name: install iptables-persistent
+  apt: name=iptables-persistent
+
+- name: copy the iptables v4 file rules
+  copy:
+    src=rules.v4
+    dest=/etc/iptables/rules.v4
+    owner=root
+    group=root
+    mode=0644 backup=yes
+  notify:
+    - start iptables-persistent
+
+- name: remove the iptables v6 file rules
+  file: name=/etc/iptables/rules.v6 state=absent
+  notify:
+    - start iptables-persistent

@@ -11,24 +11,27 @@ The Jenkins server is  `jenkins.ccw-ide.org`
 ### Jenkins Server Pre-requisite
 
 - Have an Ubuntu 14.04 server, create a `jenkins.ccw-ide.org` subdomain type A DNS entry pointing to it
-- create a `ccw` user with a strong password
-- add user `ccw` to the `sudoers` group
-- add your public key to `/home/ccw/.ssh/authorized_keys`
-- modify `/etc/ssh/sshd_config`:
-  - block root login
-  - deny password authentication
-  - restart ssh service
 
-### Ansible control machine
+- root access during the Ansible configuration (playbook will deny password challenge for root, only accept key challenge, and install your public key)
+
+### Ansible control machine Pre-requisite
 
 You need Ansible ( http://www.ansible.com ) installed on your `Ansible control machine` (e.g. your laptop).
 
-### Configure your Jenkins Server
+On OS X, you need the `sshpass` program for using ssh with passwords. You can install it via:
 
-You can customize the installation:
+    brew install https://raw.github.com/eugeneoden/homebrew/eca9de1/Library/Formula/sshpass.rb
 
-- Modify the list of Jenkins plugins to be installed in `host_vars/jenkins.ccw-ide.org` file.
+The passlib python library must be installed as well, e.g.
 
-Run the Jenkins playbook to (re)configure your Jenkins Server:
+    pip install passlib
+    # or
+    easy_install passlib
 
-    ansible-playbook -K -i hosts jenkins.yml # -K option for being asked for password when ansible is sudoing
+
+### Provision the Jenkins Server
+
+ansible-vault has been used to encrypt some sensible data.
+
+    ansible-playbook -u root -k -i hosts site.yml --vault-password-file /path/to/password-file
+

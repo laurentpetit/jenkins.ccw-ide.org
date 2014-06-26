@@ -1,0 +1,39 @@
+---
+- name: set jenkins as hostname
+  sudo: yes
+  hostname: name=jenkins
+
+- name: add hostname to /etc/localhost for 127.0.0.1
+  sudo: yes
+  lineinfile:
+    dest=/etc/hosts
+    regexp=^127\.0\.0\.1
+    line='127.0.0.1 localhost.localdomain localhost jenkins jenkins.ccw-ide.org'
+
+- name: 'add your public ~/.ssh/id_rsa.pub key to root user authorized keys'
+  sudo: yes
+  authorized_key: user=root 
+                  key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: Set up authorized_keys for the root user
+  authorized_key: user=root
+                  key="{{ lookup('file', 'public_keys/ccw.pub') }}"
+
+- name: ssh config PermitRootLogin without-password
+  sudo: yes
+  lineinfile:
+    dest=/etc/ssh/sshd_config
+    regexp=^#*\s*PermitRootLogin
+    line='PermitRootLogin without-password'
+  notify:
+    - restart ssh
+
+- name: ssh config PasswordAuthentication no
+  sudo: yes
+  lineinfile:
+    dest=/etc/ssh/sshd_config
+    regexp=^#*\s*PasswordAuthentication
+    line='PasswordAuthentication no'
+  notify:
+    - restart ssh
+

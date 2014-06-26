@@ -1,0 +1,30 @@
+---
+- name: install nginx
+  apt: name=nginx
+
+- name: delete default vhost
+  file: path=/etc/nginx/sites-enabled/default state=absent
+
+- name: write nginx.conf
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+  notify:
+    - restart nginx
+
+- name: Copy the SSL cert and key to the remote server
+  copy: src={{ ssl_src_dir }}/ dest={{ ssl_dest_dir }}
+
+# Note: to encrypt a file with OpenSSL using AES 256 encryption:
+#        openssl aes-256-cbc -salt -a -e -in ssl_signed/unencrypted.key \
+#         -out ssl_signed/encrypted.key -k MysupasecuresecretPasswordZ.x!!
+- name: Decrypt the SSL key
+  command: openssl aes-256-cbc -salt -a -d -in {{ ssl_dest_dir }}/{{ nginx_server_name }}.key -out {{ ssl_dest_dir }}/decrypted.key -k {{ ssl_key_password }}
+           creates={{ ssl_dest_dir }}/decrypted.key
+
+- name: Rename the decrypted SSL key
+  command: mv {{ ssl_dest_dir }}/decrypted.key {{ ssl_dest_dir }}/{{ nginx_server_name }}.key
+           removes={{ ssl_dest_dir }}/decrypted.key
+
+- name: Give restricted rights to SSL key
+  file: path={{ ssl_dest_dir }}/{{ nginx_server_name }}.key
+        mode=0400
+

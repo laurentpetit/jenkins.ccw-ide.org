@@ -1,5 +1,14 @@
 ---
+# jenkins
 plugins:
   - 'github'
   - 'git'
   - 'gravatar'
+  - 'thinBackup'
+
+# not yet active
+#fail2ban:
+#  config:
+#    ignoreip: 127.0.0.1/8
+#    bantime: 3600
+#    maxretry: 3

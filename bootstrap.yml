@@ -1,0 +1,8 @@
+---
+- name: Bootstrap a Jenkins Server
+  hosts: jenkins
+
+  roles:
+    - iptables
+    - bootstrap
+
