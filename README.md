@@ -1,4 +1,4 @@
-This repository provides Ansible playbooks to manage Counterclockwise servers
+This repository provides Ansible playbooks to manage Counterclockwise Jenkins server
 
 # Jenkins Server
 
@@ -31,7 +31,7 @@ The passlib python library must be installed as well, e.g.
 
 ### Provision the Jenkins Server
 
-ansible-vault has been used to encrypt some sensible data.
+ansible-vault is used to encrypt some sensible data.
 
     ansible-playbook -u root -k -i hosts site.yml --vault-password-file /path/to/password-file
 
